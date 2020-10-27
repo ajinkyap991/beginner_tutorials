@@ -1,11 +1,18 @@
+/**
+ * @file listener.cpp
+ * @author Ajinkya Parwekar
+ * @brief The listener.cpp file for beginner_tutorials ROS package.
+ * It contains code for subscribing to a published message on ROS system.
+ * @Copyright "Copyright 2020" <Ajinkya Parwekar>
+ */
+
 #include "ros/ros.h"
 #include "std_msgs/String.h"
 
 /**
  * This tutorial demonstrates simple receipt of messages over the ROS system.
  */
-void chatterCallback(const std_msgs::String::ConstPtr& msg)
-{
+void chatterCallback(const std_msgs::String::ConstPtr& msg) {
   ROS_INFO("I heard: [%s]", msg->data.c_str());
 }
 

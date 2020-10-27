@@ -1,7 +1,15 @@
-#include "ros/ros.h"
-#include "std_msgs/String.h"
+/**
+ * @file talker.cpp
+ * @author Ajinkya Parwekar
+ * @brief The talker.cpp file for beginner_tutorials ROS package.
+ * It contains code for publishing a simple message on ROS system.
+ * @Copyright "Copyright 2020" <Ajinkya Parwekar>
+ */
 
 #include <sstream>
+
+#include "ros/ros.h"
+#include "std_msgs/String.h"
 
 /**
  * This tutorial demonstrates simple sending of messages over the ROS system.
@@ -52,8 +60,7 @@ int main(int argc, char **argv) {
    * a unique string for each message.
    */
   int count = 0;
-  while (ros::ok())
-  {
+  while (ros::ok()) {
     /**
      * This is a message object. You stuff it with data, and then publish it.
      */
