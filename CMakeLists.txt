@@ -4,13 +4,13 @@ project(beginner_tutorials)
 ## add_compile_options(-std=c++11)
 
 ## Find catkin and any catkin packages
-find_package(catkin REQUIRED COMPONENTS roscpp rospy std_msgs message_generation genmsg)
+find_package(catkin REQUIRED COMPONENTS roscpp rospy std_msgs genmsg tf)
 
-## Set C++11 standard for cmake project
-set(CMAKE_CXX_STANDARD 11)
+## ADD MESSAGE FILES
+add_message_files(FILES Num.msg)
 
 ##Declared ROS messages and services
-add_service_files(DIRECTORY srv FILES UpdateString.srv)
+add_service_files(DIRECTORY srv FILES AddTwoNum.srv)
 
 ## Generate added messages and services
 generate_messages(DEPENDENCIES std_msgs)
@@ -28,3 +28,23 @@ add_dependencies(talker beginner_tutorials_generate_messages_cpp)
 add_executable(listener src/listener.cpp)
 target_link_libraries(listener ${catkin_LIBRARIES})
 add_dependencies(listener beginner_tutorials_generate_messages_cpp)
+
+if(CATKIN_ENABLE_TESTING)
+  find_package(rostest REQUIRED)
+
+  add_rostest_gtest(
+    talker_test
+    test/talker_test.launch
+    test/main_test.cpp
+    test/talker_test.cpp
+  )
+  target_link_libraries(
+    talker_test
+    ${catkin_LIBRARIES}
+  )
+  add_dependencies(
+    talker 
+    talker_test 
+    ${catkin_EXPORTED_TARGETS}
+    )
+endif()
