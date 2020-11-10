@@ -7,9 +7,23 @@
  */
 
 #include <sstream>
-
+#include <string>
 #include "ros/ros.h"
 #include "std_msgs/String.h"
+#include "beginner_tutorials/UpdateString.h"
+
+std::string originalMessage = "Hi! I'm learning ROS ";
+
+bool UpdateString(
+    beginner_tutorials::UpdateString::Request& request,
+    beginner_tutorials::UpdateString::Response& response) {
+
+  originalMessage = request.inputString;
+  response.outputString = "User modified the original message to: "
+      + request.inputString;
+  ROS_WARN_STREAM("I'm getting better as ROS");
+  return true;
+}
 
 /**
  * This tutorial demonstrates simple sending of messages over the ROS system.
@@ -52,6 +66,7 @@ int main(int argc, char **argv) {
    * buffer up before throwing some away.
    */
   ros::Publisher chatter_pub = n.advertise<std_msgs::String>("chatter", 1000);
+  ros::ServiceServer server = n.advertiseService("UpdateString", UpdateString);
 
   ros::Rate loop_rate(10);
 
@@ -67,10 +82,10 @@ int main(int argc, char **argv) {
     std_msgs::String msg;
 
     std::stringstream ss;
-    ss << "I'm learning ROS " << count;
+    ss << originalMessage << count;
     msg.data = ss.str();
 
-    ROS_INFO("%s", msg.data.c_str());
+    ROS_INFO_STREAM("Message : "<< msg.data.c_str());
 
     /**
      * The publish() function is how you send messages. The parameter
