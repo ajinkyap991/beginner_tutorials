@@ -7,21 +7,20 @@
  */
 
 #include <sstream>
-#include <string>
+#include <tf/transform_broadcaster.h>
 #include "ros/ros.h"
 #include "std_msgs/String.h"
-#include "beginner_tutorials/UpdateString.h"
+#include "beginner_tutorials/AddTwoNum.h"
 
-std::string originalMessage = "Hi! I'm learning ROS ";
+std::string originalMessage = "Hi! I'm now learning ROS ";
 
-bool UpdateString(
-    beginner_tutorials::UpdateString::Request& request,
-    beginner_tutorials::UpdateString::Response& response) {
+bool addNum(
+    beginner_tutorials::AddTwoNum::Request& request,
+    beginner_tutorials::AddTwoNum::Response& response) {
 
-  originalMessage = request.inputString;
-  response.outputString = "User modified the original message to: "
-      + request.inputString;
-  ROS_WARN_STREAM("I'm getting better as ROS");
+  response.addition = request.num1 + request.num2;
+  ROS_INFO_STREAM("Request: num1 = " << (long int)request.num1 << "num2 = " << (long int)request.num2);
+  ROS_INFO_STREAM("Return response: " << (long int)response.addition);
   return true;
 }
 
@@ -48,6 +47,8 @@ int main(int argc, char **argv) {
    */
   ros::NodeHandle n;
 
+  ros::Rate loop_rate(10);
+
   /**
    * The advertise() function is how you tell ROS that you want to
    * publish on a given topic name. This invokes a call to the ROS
@@ -66,9 +67,7 @@ int main(int argc, char **argv) {
    * buffer up before throwing some away.
    */
   ros::Publisher chatter_pub = n.advertise<std_msgs::String>("chatter", 1000);
-  ros::ServiceServer server = n.advertiseService("UpdateString", UpdateString);
-
-  ros::Rate loop_rate(10);
+  ros::ServiceServer service = n.advertiseService("add_two_num", addNum);
 
   /**
    * A count of how many messages we have sent. This is used to create
@@ -76,6 +75,14 @@ int main(int argc, char **argv) {
    */
   int count = 0;
   while (ros::ok()) {
+
+    static tf::TransformBroadcaster br;
+    tf::Transform transform;
+    transform.setOrigin(tf::Vector3(1.0, 2.0, 3.0));
+    tf::Quaternion q;
+    q.setRPY(0.52, 0.47, 0.47);
+    transform.setRotation(q);
+    br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "world", "talk"));
     /**
      * This is a message object. You stuff it with data, and then publish it.
      */
@@ -98,9 +105,10 @@ int main(int argc, char **argv) {
     ros::spinOnce();
 
     loop_rate.sleep();
+
     ++count;
   }
-
-
+  
+  ros::spin();
   return 0;
 }

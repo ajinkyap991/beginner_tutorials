@@ -8,6 +8,7 @@
 
 #include "ros/ros.h"
 #include "std_msgs/String.h"
+#include "beginner_tutorials/AddTwoNum.h"
 
 /**
  * This tutorial demonstrates simple receipt of messages over the ROS system.
@@ -28,6 +29,11 @@ int main(int argc, char **argv) {
    * part of the ROS system.
    */
   ros::init(argc, argv, "listener");
+
+  if (argc != 3) {
+    ROS_INFO_STREAM("Arguments not provided!");
+    return 1;
+  }
 
   /**
    * NodeHandle is the main access point to communications with the ROS system.
@@ -52,6 +58,11 @@ int main(int argc, char **argv) {
    * away the oldest ones.
    */
   ros::Subscriber sub = n.subscribe("chatter", 1000, chatterCallback);
+
+  ros::ServiceClient client = n.serviceClient<beginner_tutorials::AddTwoNum>("add_two_num");
+  beginner_tutorials::AddTwoNum srv;
+  srv.request.num1 = atoll(argv[1]);
+  srv.request.num2 = atoll(argv[2]);
 
   /**
    * ros::spin() will enter a loop, pumping callbacks.  With this version, all
