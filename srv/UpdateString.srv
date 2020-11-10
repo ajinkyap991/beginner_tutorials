@@ -1,5 +1,0 @@
-#Request field
-string inputString
----
-#Response field
-string outputString
