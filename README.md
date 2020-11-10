@@ -73,7 +73,7 @@ rosrun beginner_tutorials listener
 Execute the files and then open a new terminal and type:
 ```
 cd catkin_ws
-rosservice call /UpdateString "Enter your custom message here "
+rosservice call /add_two_ints 2 3
 ```
 To end the process, type ctrl+C on all the terminal windows one by one.
 
@@ -81,15 +81,43 @@ To end the process, type ctrl+C on all the terminal windows one by one.
 End all the previous processes and type in a new terminal window:
 ```
 cd catkin_ws
-roslaunch beginner_tutorials Week9_HW.launch 
+roslaunch beginner_tutorials week10.launch a:=2 b:=3
 ```
-
-### Change Loop Frequency
-Terminate the previous process by typing ctrl+C in the window and then type:
+## Inspect tf frames
 ```
-roslaunch beginner_tutorials Week9_HW.launch frequency:=<any natural number>
+cd catkin_ws
+source devel/setup.bash
+rosrun rqt_tf_tree rqt_tf_tree
 ```
-
+## Running rostest
+```
+cd catkin_ws
+source devel/setup.bash
+roslaunch talker_test.launch a:=4 b:=5
+```
+## Recording rosbag
+```
+cd catkin_ws
+source devel/setup.bash
+roslaunch Week10.launch record:=true
+```
+## Inspecting rosbag file
+```
+cd catkin_ws/src/beginner_tutorials/results
+rosbag info beginner_tutorials.bag
+```
+## Playback rosbag file with listener node
+Terminal 1
+```
+cd catkin_ws/src/beginner_tutorials/results
+rosbag play beginner_tutorials.bag
+```
+Terminal 2
+```
+cd catkin_ws
+source devel/setup.bash
+rosrun beginner_tutorials listener
+```
 ## Cpplint check
 ```
 cd  <path to repository>
