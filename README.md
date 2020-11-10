@@ -68,7 +68,7 @@ Open a new terminal window and type:
 cd catkin_ws
 rosrun beginner_tutorials listener
 ```
-### Change the publishing message to a custom message using rosservice
+### Call Rosservice to add two numbers
 
 Execute the files and then open a new terminal and type:
 ```
