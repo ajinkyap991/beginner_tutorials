@@ -6,6 +6,9 @@ project(beginner_tutorials)
 ## Find catkin and any catkin packages
 find_package(catkin REQUIRED COMPONENTS roscpp rospy std_msgs message_generation genmsg)
 
+## Set C++11 standard for cmake project
+set(CMAKE_CXX_STANDARD 11)
+
 ##Declared ROS messages and services
 add_service_files(DIRECTORY srv FILES UpdateString.srv)
 
